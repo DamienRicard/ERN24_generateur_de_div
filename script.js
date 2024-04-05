@@ -9,6 +9,19 @@ function randomColor(){
     return `rgb(${randomNumber()}, ${randomNumber()}, ${randomNumber()})`;
 }
 
+//fonction pour vérifier s'il y a des div dans le container
+function checkDiv(){
+    let container = document.getElementById('container');
+    let boxes = document.getElementsByClassName('box');
+    if (boxes.length > 0) {
+        document.getElementById('removeLastButton').style.display = 'inline-block';        //block pour qu'ils apparaissent tout simplement
+        document.getElementById('removeAllDiv').style.display = 'inline-block';
+    } else {
+        document.getElementById('removeLastButton').style.display = 'none';
+        document.getElementById('removeAllDiv').style.display = 'none';
+    }
+}
+
 //on crée une fonction qui va générer une div
 function addDiv(){
     //on récupère la div avec l'id container de notre index.html
@@ -24,11 +37,20 @@ function addDiv(){
     //on va ajouter un style à notre div : <div class="box" style="background-color: red"> </div>
     newDiv.style.backgroundColor = randomColor();
 
+    //ajout d'un évènement sur la div
+newDiv.addEventListener("click", ()=> {
+    container.removeChild(newDiv);
+    checkDiv();
+})
+
     //on va imbriquer la nouvelle div dans la div container
     container.appendChild(newDiv);  //prend newDiv et la rend enfant de container, elle l'insère
     //appenChild permet d'ajouter un enfant à un parent
     //appen permet d'ajouter des enfants à un parent
 }
+
+
+
 
 //fonction enlève la dernière div
 function removeLastDiv(){
@@ -38,6 +60,7 @@ function removeLastDiv(){
     if (boxes.length > 0){
         //si j'ai au moins une div de créee j'enlève la dernière
         container.removeChild(boxes[boxes.length - 1]);
+        checkDiv();
     }
 }
 
@@ -45,6 +68,7 @@ function removeLastDiv(){
 function removeAllDiv(){
     let container = document.getElementById('container');
     container.innerHTML = "";
+    checkDiv();
 }
 
 document.getElementById('removeAllDiv').addEventListener("click", ()=>{
@@ -60,9 +84,14 @@ let addButton = document.getElementById('addButton');
 addButton.addEventListener("click", ()=>{
     //on appelle notre fonction addDiv
     addDiv();
+    checkDiv();
 });      //fonction anonyme qui n'a pas de nom, ou collable
 
 //on ajoute un évènement à notre bouton avec l'id "removeLastButton"
 document.getElementById('removeLastButton').addEventListener("click", () =>{
     removeLastDiv();
 })
+
+
+//appel initial de la fonction checkDiv au démarrage de l'appli
+checkDiv();
